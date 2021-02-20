@@ -54,10 +54,10 @@ class AddNewTask extends Component {
 
   render() {
     return (
-      <div>
+      <form onSubmit={this.addTask}>
         <input type="text" value={this.state.name} onChange={this.onChange} />
         <button onClick={this.addTask}>+</button>
-      </div>
+      </form>
     )
   }
 }
