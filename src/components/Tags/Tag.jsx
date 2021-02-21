@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class Tag extends Component {
   changeTag = () => {
@@ -7,14 +8,24 @@ class Tag extends Component {
 
   render() {
     const { tag, currentTag } = this.props
-
     return (
       <label>
-        <input id={tag.id} onChange={this.changeTag} type="radio" name="tag" checked={currentTag === tag.id} />
+        <input
+          type="radio"
+          name="tag"
+          checked={currentTag === tag.id}
+          onChange={this.changeTag}
+        />
         {tag.name}
       </label>
     )
   }
+}
+
+Tag.propTypes = {
+  tag: PropTypes.object,
+  changeTag: PropTypes.func,
+  currentTag: PropTypes.number
 }
 
 export default Tag

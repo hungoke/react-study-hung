@@ -1,8 +1,8 @@
 import React, { Component} from 'react'
-import ListTasks from './components/ListTasks'
-import ListTag from './components/ListTag'
+import TasksList from './components/ShowTasksList/TasksList'
+import TagsList from './components/Tags/TagsList'
 import { tasks } from './constant/tasks'
-import AddNewTask from './components/AddNewTask'
+import AddNewTask from './components/AddNewRecord/AddNewTask'
 class App extends Component {
   state = {
     tasks,
@@ -12,58 +12,101 @@ class App extends Component {
       { id: 3, name: 'school' }
     ],
     currentTag: 0,
+    statusList: [
+      { id: 1, name: 'Active' },
+      { id: 2, name: 'Completed' }
+    ],
+    currentStatus: 0
   }
 
-  delete = (task) => {
+  deleteTask = task => {
     tasks.splice(tasks.indexOf(task), 1)
     this.setState({
       tasks: [...tasks]
     })
   }
 
-  changeCurrentTag = (tag) => {
+  changeCurrentTag = tag => {
     this.setState({
       currentTag: tag.id
     })
   }
 
-  getCurrentTag = () => {
-    const { currentTag } = this.state
+  getCurrentTagName = () => {
+    const { currentTag, tags } = this.state
     if (currentTag === 0) {
       return 'All'
     }
 
-    const tag = this.state.tags.find(tag => tag.id === currentTag)
-
-    return tag.name
+    const tagName = tags.find(tag => tag.id === currentTag).name
+    return tagName
   }
 
-  addNewTask = (task) => {
+  addNewTask = task => {
+    tasks.unshift(task)
     this.setState({
-      tasks: [task, ...tasks]
+      tasks: [...tasks]
+    })
+  }
+
+  changeStatus = task => {
+    tasks.forEach(item => {
+      if (item.id === task.id) {
+        if (task.status === 'Completed') {
+          task.status = 'Active'
+        } else {
+          task.status = 'Completed'
+        }
+      }
+    })
+
+    this.setState({
+      tasks: [...tasks]
+    })
+  }
+
+  changeCurrentStatus = status => {
+    this.setState({
+      currentStatus: status.id
+    })
+  }
+
+  clearCompleted = (arrayTasks) => {
+    arrayTasks.forEach(task => {
+      task.status = 'Active'
+    })
+
+    this.setState({
+      tasks: [...tasks]
     })
   }
 
   render() {
     return (
       <div>
+        <h1>React Todo App</h1>
         <AddNewTask
-          currentTag={this.getCurrentTag()}
+          currentTag={this.getCurrentTagName()}
           addNewTask={this.addNewTask}
           tasks={this.state.tasks}
         />
 
-        <ListTag
+        <TagsList
           currentTag={this.state.currentTag}
           tags={this.state.tags}
           changeCurrentTag={this.changeCurrentTag}
         />
 
-        <ListTasks
+        <TasksList
           currentTag={this.state.currentTag}
-          tasksListTask={this.state.tasks}
+          tasks={this.state.tasks}
           tags={this.state.tags}
-          delete={this.delete}
+          deleteTask={this.deleteTask}
+          changeStatus={this.changeStatus}
+          statusList={this.state.statusList}
+          currentStatus={this.state.currentStatus}
+          changeCurrentStatus={this.changeCurrentStatus}
+          clearCompleted={this.clearCompleted}
         />
       </div>
     )

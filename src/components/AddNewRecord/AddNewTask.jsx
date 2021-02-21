@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-
+import PropTypes from 'prop-types'
 class AddNewTask extends Component {
   state = {
+    id: '',
     name: '',
-    tag: this.props.currentTag
+    tag: this.props.currentTag,
+    status: 'Active'
   }
 
   generateID = () => {
@@ -24,9 +26,8 @@ class AddNewTask extends Component {
     })
   }
 
-  addTask = (event) => {
+  addTask = event => {
     event.preventDefault()
-    console.log(event.target.value)
     if (this.state.name === '') {
       alert('không được để trống')
       return
@@ -41,14 +42,15 @@ class AddNewTask extends Component {
       id: this.generateID(),
       name: this.state.name,
       tag: this.props.currentTag,
-      checked: false,
-      complete: false
+      status: 'Active'
     }
 
     this.props.addNewTask(task)
-
     this.setState({
-      name: ''
+      id: '',
+      name: '',
+      tag: this.props.currentTag,
+      status: 'Active'
     })
   }
 
@@ -60,6 +62,12 @@ class AddNewTask extends Component {
       </form>
     )
   }
+}
+
+AddNewTask.propTypes = {
+  currentTag: PropTypes.string,
+  addNewTask: PropTypes.func,
+  tasks: PropTypes.array
 }
 
 export default AddNewTask
